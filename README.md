@@ -22,7 +22,7 @@ The file should be ready after loading a while. If you see a blue squiggle under
 
 * A useful (but optional) extension is the VSCode extension `Error Lens`. If you install this, you will see messages from Lean right in the file where you're typing.
 
-## Windows Troubleshooting
+### Windows Troubleshooting
 
 If you have a choice between operating system, Lean works a little better on Linux/Mac/WSL than on Windows, but it also works fine on Windows.
 
@@ -32,7 +32,7 @@ If you have a choice between operating system, Lean works a little better on Lin
 
 * If you get errors such as `curl: (35) schannel` or `uncaught exception: no such file or directory (error code: 2)` take a look [here](https://leanprover-community.github.io/install/project.html#troubleshooting).
 
-## General Troubleshooting
+### General Troubleshooting
 
 Note: To get this repository, you will need to download Lean's mathematical library, which takes about 5 GB of storage space.
 
@@ -43,6 +43,13 @@ It might be tricky to get Lean running on an old laptop or a chromebook, since L
 
 * Unfortunately, the installation step, and loading Lean for the first time is very slow on Windows computers. Once Lean has finished starting up, it should be quick and responsive.
 
+* You should not need to build Mathlib files on your computer, either during installation or updating the repository. If you notice that this is happening, try the following steps:
+  * Close VSCode (if it is open).
+  * Open the course folder in VS Code and open some Lean file in the course.
+  * Press `∀ > Project Actions... > Fetch Mathlib Build Cache` and wait for the cache to download.
+  * Wait until the command finishes with downloading and decompressing. If you get an error, run it again.
+  * You might have to restart the Lean file, and then Lean should be compiling your file in less than a minute.
+
 ## Update repository
 
 If you want to get the latest version of this repository (e.g. the latest exercises), then you can pull the changes.
@@ -52,13 +59,6 @@ or via VSCode, in the `Source Control` tab (third icon in the top-left, or `ctrl
 under `⋯` (More actions) you can click `Pull` to get the latest changes.
 
 Note: you should *not* press `Sync`, since that will try to upload your changes to the assignment files to GitHub (you don't have the rights to do this).
-
-Note: you should not need to build mathlib files on your computer. If you notice, try the following steps:
-* Close VSCode (if it is open).
-* Open the course folder in VS Code and open some Lean file in the course.
-* Press `∀ > Project Actions... > Fetch Mathlib Build Cache` and wait for the cache to download.
-* Wait until the command finishes with downloading and decompressing. If you get an error, run it again.
-* You might have to restart the Lean file, and then Lean should be compiling your file in less than a minute.
 
 ## Temporary ways to use Lean
 
