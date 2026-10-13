@@ -61,19 +61,7 @@ def ContinuousAtPoint (f : ℝ → ℝ) (x₀ : ℝ) : Prop :=
 example (f : ℝ → ℝ) (u : ℕ → ℝ) (x₀ : ℝ)
     (hu : SequenceHasLimit u x₀) (hf : ContinuousAtPoint f x₀) :
     SequenceHasLimit (f ∘ u) (f x₀) := by
-  -- sorry
-  unfold SequenceHasLimit
-  intro (ε : ℝ) (hε : ε > 0)
-  obtain ⟨δ : ℝ, hδ : δ > 0,
-    h2f : ∀ x, |x - x₀| < δ → |f x - f x₀| < ε⟩ := hf ε hε
-  obtain ⟨N : ℕ, hN : ∀ n ≥ N, |u n - x₀| < δ⟩ := hu δ hδ
-  use N
-  intro (n : ℕ) (hn : n ≥ N)
-  have : |u n - x₀| < δ := hN n hn
-  have : |f (u n) - f x₀| < ε := h2f (u n) this
-  assumption
-  done
-  -- sorry
+  sorry
 
 
 
