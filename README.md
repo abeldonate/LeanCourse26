@@ -54,9 +54,9 @@ It might be tricky to get Lean running on an old laptop or a chromebook, since L
 
 If you want to get the latest version of this repository (e.g. the latest exercises), then you can pull the changes.
 
-You can do this either via a terminal (`git pull`)
-or via VSCode, in the `Source Control` tab (third icon in the top-left, or `ctrl+shift+G`/`cmd+shift+G`),
-under `⋯` (More actions) you can click `Pull` to get the latest changes.
+* First save all files you've worked on.
+* Then in the `Source Control` tab (third icon in the top-left, or `ctrl+shift+G`/`cmd+shift+G`), under `⋯` (More actions) you can press `Pull`.
+  (You can also run `git pull` via the terminal.)
 
 Note: you should *not* press `Sync`, since that will try to upload your changes to the assignment files to GitHub (you don't have the rights to do this).
 
