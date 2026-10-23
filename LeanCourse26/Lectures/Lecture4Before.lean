@@ -115,6 +115,9 @@ using the following tactics.
 * `push Not` to push negations inside quantifiers and connectives.
 -/
 
+example (p : Prop) (h : ¬¬p) : p := by
+  sorry
+
 example (p q : Prop) (h : ¬q → ¬p) : p → q := by
   sorry
 
@@ -222,8 +225,7 @@ You can often find similar theorems nearby the theorem you searched for.
 
 #click_suggestions
 
---#leansearch "if a < b and c ≤ d, then a + c < b + d."
-#check add_lt_add_of_lt_of_le
+
 
 example (a b x y : ℝ) (h : a < b) (h2 : x ≤ y) : a + exp x < b + exp y := by
   sorry
@@ -261,7 +263,7 @@ example {G : Type*} [Group G] {a b : G} (h : a⁻¹ * a * a * a⁻¹ = b) : b = 
   sorry
 
 example (x : ℝ) : (3 * (x - x))^2 = 0 := by
-  simp?
+  sorry
 
 /- # Orders -/
 
