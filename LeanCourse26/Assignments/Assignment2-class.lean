@@ -20,32 +20,21 @@ open Real Function Set Nat
 /-! # Exercises to practice. -/
 
 example (p q r s : Prop) (h : p ∧ q → r) (hp : p) (h' : q → s) : q → r ∧ s := by
-  intro hq
-  refine ⟨?_,?_⟩
-  · exact h ⟨hp,hq⟩
-  · exact h' hq
+  sorry
 
 example {α : Type*} {p q : α → Prop} (h : ∀ x, p x → q x) :
     (∃ x, p x) → (∃ x, q x) := by
-  intro ⟨x, hp⟩
-  exact ⟨x, h x hp⟩
+  sorry
 
 -- Exercise: prove this by contraposition.
 example : 2 ≠ 4 → 1 ≠ 2 := by
-  contrapose!
-  intro h
-  omega
-
+  sorry
 
 /- Prove the following with basic tactics,
 in particular without using `tauto`, `grind` or lemmas from Mathlib. -/
 example {α : Type*} {p : α → Prop} {r : Prop} :
     ((∃ x, p x) → r) ↔ (∀ x, p x → r) := by
-  constructor
-  · intro hpr x hp
-    exact hpr ⟨x, hp⟩
-  · intro hpxr ⟨x, hp⟩
-    exact (hpxr x) hp
+  sorry
 
 
 
@@ -53,37 +42,24 @@ example {α : Type*} {p : α → Prop} {r : Prop} :
 in particular without using `tauto`, `grind` or lemmas from Mathlib. -/
 example {α : Type*} {p : α → Prop} {r : Prop} :
     (∃ x, p x ∧ r) ↔ ((∃ x, p x) ∧ r) := by
-  constructor
-  · intro ⟨x, ⟨hpx, hr⟩⟩
-    exact ⟨⟨x, hpx⟩, hr⟩
-  · intro ⟨⟨x, hpx⟩, hr⟩
-    exact ⟨x, ⟨hpx, hr⟩⟩
+  sorry
 
 
 /- Prove the following without using `push_neg` or lemmas from Mathlib.
 You will need to use `by_contra` in the proof. -/
 example {α : Type*} (p : α → Prop) : (∃ x, p x) ↔ (¬ ∀ x, ¬ p x) := by
-  constructor
-  · intro ⟨x, hx⟩ hall
-    exact hall x hx
-  · intro h
-    by_contra hne
-    apply h
-    intro x hx
-    exact hne ⟨x, hx⟩
-
+  sorry
 
 def SequentialLimit (u : ℕ → ℝ) (l : ℝ) : Prop :=
   ∀ ε > 0, ∃ N, ∀ n ≥ N, |u n - l| < ε
 
+-- THIS
 example (a : ℝ) : SequentialLimit (fun _ : ℕ ↦ a) a := by
-  unfold SequentialLimit
   intro eps heps
   use 0
   intro n hn
-  rw [sub_self]
-  rw [abs_zero]
-  positivity
+  simp [heps]
+
 
 
 /-
@@ -92,32 +68,28 @@ The parentheses are mandatory when writing.
 Use `calc` to prove this.
 You can use `exact?` to find lemmas from the library,
 such as the fact that factorial is monotone. -/
+-- THIS
 example (n m : ℕ) (h : n ≤ m) : (n)! ∣ (m + 1)! := by
-  calc (n)! ∣ (m)! := Nat.factorial_dvd_factorial h
-    _ ∣ (m + 1)! := Nat.factorial_dvd_factorial (Nat.le_succ m)
+  calc
+    n ! ∣ (n + 1) ! := by exact Dvd.intro_left n.succ rfl
+    _   ∣ (m + 1) ! := by exact factorial_dvd_factorial (by simpa)
+
+
 
 example (a b c x y : ℝ) (h : a ≤ b) (h2 : b < c) (h3 : x ≤ y) :
     a + exp x ≤ c + exp (y + 2) := by
-  gcongr
-  · linarith
-  · linarith
+  sorry
 
 -- Use `rw?` or `#click_suggestions` to help you in the following calculation.
 -- Alternatively, write out a calc block by hand.
 example {G : Type*} [Group G] {a b c : G}
     (h : a⁻¹ * b * c * c⁻¹ * a * b⁻¹ * a * a⁻¹ = b) (h' : b * a = a * b) : b = 1 := by
-  rw [mul_inv_cancel_right, mul_inv_cancel_right, mul_assoc a⁻¹ b a, h', inv_mul_cancel_left,
-    mul_inv_cancel] at h
-  exact h.symm
+  sorry
 
 /-- Prove the following using `linarith`.
 Note that `linarith` cannot deal with implication or if and only if statements. -/
 example (a b c : ℝ) : a + b ≤ c ↔ a ≤ c - b := by
-  constructor
-  · intro h
-    linarith
-  · intro h
-    linarith
+  sorry
 
 
 /- You can prove many equalities and inequalities by being smart with calculations.
@@ -149,13 +121,10 @@ example {a₁ a₂ b₁ b₂ c₁ c₂ : ℝ} (hab : a₁ + a₂ = b₁ + b₂) 
 
 
 example {m n : ℤ} : n - m ^ 2 ≤ n + 3 := by
-  calc
-    n - m ^ 2 ≤ n - 0 := by gcongr; exact sq_nonneg m
-    _ ≤ n + 3 := by linarith
+  sorry
 
 example {a : ℝ} (h : ∀ b : ℝ, a ≥ -3 + 4 * b - b ^ 2) : a ≥ 1 := by
-  have h2 := h 2
-  linarith
+  sorry
 
 
 
@@ -174,74 +143,38 @@ def Continuous' (f : ℝ → ℝ) := ∀ x, ContinuousAtPoint f x
 -- Exercise for you. Remember that you can use `unfold` to expand a definition.
 example (f g : ℝ → ℝ) (hfg : ∀ x, ContinuousAtPoint f x ↔ ContinuousAtPoint g x) :
     Continuous' f ↔ Continuous' g := by
-  unfold Continuous'
-  constructor
-  · intro h x
-    exact (hfg x).mp (h x)
-  · intro h x
-    exact (hfg x).mpr (h x)
-
+  sorry
 
 def All (p : ℝ → Prop) := ∀ x, p x
 
 example (p q : ℝ → Prop) (h : ∀ x, p x ↔ q x) :
     All p ↔ All q := by
-  constructor
-  unfold All
-  · intro h2 x
-    exact (h x).mp (h2 x)
-  · intro h2 x
-    exact (h x).mpr (h2 x)
-
-
-
+  sorry
 
 example (p q : ℝ → Prop) (h : ∀ x, p x ↔ q x) :
     (∃ x, p x) ↔ (∃ x, q x) := by
-  constructor
-  · intro ⟨x, hpx⟩
-    exact ⟨x, (h x).mp hpx⟩
-  · intro ⟨x, hpx⟩
-    exact ⟨x, (h x).mpr hpx⟩
+  sorry
 
 -- Is the following true? If yes, prove it in Lean.
 -- If not, give a counterexample and prove it. (What do you have to do to do so?)
--- example (p q : ℕ → Prop) (h: (∃ x, p x) ↔ (∃ x, q x)) : ∀ x, p x ↔ q x := by
---   sorry
--- This is false: take `p x := x = 0` and `q x := x = 1`. Both sides of `h` are true,
--- but `p 0` holds while `q 0` does not. To show this in Lean, we prove the negation
--- of the statement, quantified over all `p` and `q`.
-example : ¬ ∀ (p q : ℕ → Prop), ((∃ x, p x) ↔ (∃ x, q x)) → ∀ x, p x ↔ q x := by
-  intro h
-  have h0 := h (fun x ↦ x = 0) (fun x ↦ x = 1) ⟨fun _ ↦ ⟨1, rfl⟩, fun _ ↦ ⟨0, rfl⟩⟩ 0
-  simp at h0
+example (p q : ℕ → Prop) (h: (∃ x, p x) ↔ (∃ x, q x)) : ∀ x, p x ↔ q x := by
+  sorry
+
+-- Let `p : x = 1` and `q : x = 2`
+-- THIS
+example : ¬ ∀ x, (x = 1) ↔ (x = 2) := by
+  push Not
+  use 1
+  left
+  simp
+
 
 
 
 /- Prove the following with basic tactics, without using `tauto` or lemmas from Mathlib. -/
 lemma exists_distributes_over_or {α : Type*} {p q : α → Prop} :
     (∃ x, p x ∨ q x) ↔ (∃ x, p x) ∨ (∃ x, q x) := by
-  constructor
-  · intro ⟨x, hpq⟩
-    cases hpq with
-    | inl hp =>
-      left
-      exact ⟨x, hp⟩
-    | inr hq =>
-      right
-      exact ⟨x, hq⟩
-  · intro hpq
-    cases hpq with
-    | inl hpx =>
-      obtain ⟨x, hp⟩ := hpx
-      use x
-      left
-      exact hp
-    | inr hqx =>
-      obtain ⟨x, hq⟩ := hqx
-      use x
-      right
-      exact hq
+  sorry
 
 end Logic
 
@@ -260,7 +193,7 @@ section Functions
 -- Use `exact?`, `apply?` or `#click_suggestions` to find this theorem in Mathlib.
 -- Describe what you are doing.
 example (p : ℕ) [hp: Fact (Nat.Prime p)] (x : ZMod p) : x ^ p = x := by
-  exact ZMod.pow_card x
+  sorry
 
 -- The above theorem has a name. What is it?
 -- Use this name to find the same result using leansearch.net.
@@ -279,75 +212,64 @@ example (p : ℕ) [hp: Fact (Nat.Prime p)] (x : ZMod p) : x ^ p = x := by
 
 -- Use `exact?` to find the following theorem in Mathlib.
 example (p : ℕ) [hp: Fact (Nat.Prime p)] (k : ZMod p) (hk : k ≠ 0) : k ^ (p - 1) = 1 := by
-  exact ZMod.pow_card_sub_one_eq_one hk
+  sorry
 
 -- Prove the following.
+-- THIS
 example (p : ℕ) [Fact (Nat.Prime p)] :
     (fun x ↦ x ^ p + 2 * x ^ (2 * (p - 1) + 1) : ZMod p → ZMod p) = (fun x ↦ 3 * x) := by
   ext x
-  rw [ZMod.pow_card, pow_succ, pow_mul']
-  by_cases hx : x = 0
-  · simp [hx]
-  · rw [ZMod.pow_card_sub_one_eq_one hx]
+  simp
+  rw [pow_succ, pow_mul]
+  by_cases hzero : x = 0
+  · simp [hzero]
+  · rw [ZMod.pow_card_sub_one_eq_one (by simp [hzero])]
     ring
-
 
 
 
 -- Prove the following.
 example (p : ℕ) [Fact (Nat.Prime p)] (k : ZMod p) : k ^ (3 * (p - 1) + 1) = k := by
-  by_cases hk : k = 0
-  · simp [hk]
-  · rw [pow_succ, pow_mul', ZMod.pow_card_sub_one_eq_one hk, one_pow, one_mul]
+  sorry
 
 example (p : ℕ) [Fact (Nat.Prime p)] (k : ZMod p) : k ^ (5 * (p - 1) + 1) = k := by
-  by_cases hk : k = 0
-  · simp [hk]
-  · rw [pow_succ, pow_mul', ZMod.pow_card_sub_one_eq_one hk, one_pow, one_mul]
+  sorry
 
 end Functions
 
 
 /- Prove that the sum of two converging sequences converges. -/
+-- THIS
 lemma sequentialLimit_add {s t : ℕ → ℝ} {a b : ℝ}
       (hs : SequentialLimit s a) (ht : SequentialLimit t b) :
     SequentialLimit (fun n ↦ s n + t n) (a + b) := by
-  intro ε hε
-  obtain ⟨N₁, hN₁⟩ := hs (ε / 2) (by linarith)
-  obtain ⟨N₂, hN₂⟩ := ht (ε / 2) (by linarith)
-  use max N₁ N₂
+  unfold SequentialLimit
+  intro eps heps
+
+  obtain ⟨Ns, hNs⟩ := hs (eps / 2) (by positivity)
+  obtain ⟨Nt, hNt⟩ := ht (eps / 2) (by positivity)
+  use max Ns Nt
   intro n hn
-  have h₁ := hN₁ n (le_of_max_le_left hn)
-  have h₂ := hN₂ n (le_of_max_le_right hn)
-  calc |s n + t n - (a + b)| = |(s n - a) + (t n - b)| := by congr 1; ring
-    _ ≤ |s n - a| + |t n - b| := abs_add_le _ _
-    _ < ε / 2 + ε / 2 := by linarith
-    _ = ε := by ring
+  have hNs' := hNs n (le_of_max_le_left hn)
+  have hNt' := hNt n (le_of_max_le_right hn)
+  simp
+  rw [add_sub_add_comm]
+  rw [show eps = eps / 2 + eps / 2 by simp]
+  apply lt_of_le_of_lt (abs_add_le _ _)
+  exact add_lt_add hNs' hNt'
+
+
+
+
 
 /- It may be useful to case split on whether `c = 0` is true. -/
 lemma sequentialLimit_mul_const {s : ℕ → ℝ} {a : ℝ} (c : ℝ) (hs : SequentialLimit s a) :
     SequentialLimit (fun n ↦ c * s n) (c * a) := by
-  by_cases hc : c = 0
-  · intro ε hε
-    use 0
-    intro n _
-    simp [hc, hε]
-  · intro ε hε
-    have hc' : 0 < |c| := abs_pos.mpr hc
-    obtain ⟨N, hN⟩ := hs (ε / |c|) (div_pos hε hc')
-    use N
-    intro n hn
-    calc |c * s n - c * a| = |c| * |s n - a| := by rw [← mul_sub, abs_mul]
-      _ < |c| * (ε / |c|) := mul_lt_mul_of_pos_left (hN n hn) hc'
-      _ = ε := by field_simp
+  sorry
 
 /-- Prove this using a calculation. -/
 lemma exercise_square {m n k : ℤ} (h : m ^ 2 + n ≤ 2) : n + 1 ≤ 3 + k ^ 2 := by
-  calc
-    n + 1 ≤ 3 - m ^ 2 := by linarith
-    _ ≤ 3 - 0 := by gcongr; exact sq_nonneg m
-    _ = 3 + 0 := by ring
-    _ ≤ 3 + k ^ 2 := by gcongr; exact sq_nonneg k
+  sorry
 
 
 section Growth
@@ -367,37 +289,21 @@ def EventuallyGrowsFaster (s t : ℕ → ℕ) : Prop :=
 /- show that `n * s n` grows (eventually) faster than `s n`. -/
 lemma eventuallyGrowsFaster_mul_left :
     EventuallyGrowsFaster (fun n ↦ n * s n) s := by
-  intro k
-  use k
-  intro n hn
-  show k * s n ≤ n * s n
-  gcongr
+  sorry
 
 /- Show that if `sᵢ` grows eventually faster than `tᵢ` then
 `s₁ + s₂` grows eventually faster than `t₁ + t₂`. -/
+-- THIS
 lemma eventuallyGrowsFaster_add {s₁ s₂ t₁ t₂ : ℕ → ℕ}
     (h₁ : EventuallyGrowsFaster s₁ t₁) (h₂ : EventuallyGrowsFaster s₂ t₂) :
     EventuallyGrowsFaster (s₁ + s₂) (t₁ + t₂) := by
-  intro k
-  obtain ⟨N₁, hN₁⟩ := h₁ k
-  obtain ⟨N₂, hN₂⟩ := h₂ k
-  use max N₁ N₂
-  intro n hn
-  rw [Pi.add_apply, Pi.add_apply, mul_add]
-  exact _root_.add_le_add (hN₁ n (le_of_max_le_left hn)) (hN₂ n (le_of_max_le_right hn))
+  sorry
+
 
 /- Find a positive function that grows faster than itself when shifted by one. -/
 lemma eventuallyGrowsFaster_shift : ∃ (s : ℕ → ℕ),
     EventuallyGrowsFaster (fun n ↦ s (n+1)) s ∧ ∀ n, s n ≠ 0 := by
-  -- The factorial works: `(n + 1)! = (n + 1) * n !`.
-  refine ⟨fun n ↦ (n)!, ?_, fun n ↦ (Nat.factorial_pos n).ne'⟩
-  intro k
-  use k
-  intro n hn
-  show k * (n)! ≤ (n + 1)!
-  rw [Nat.factorial_succ]
-  gcongr
-  omega
+  sorry
 
 
 
