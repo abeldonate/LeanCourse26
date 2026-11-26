@@ -25,7 +25,15 @@ section
 -- In this case, you can actually derive a contradiction from a function with this property.
 -- Do so in the following exercise.
 lemma contradictory_definition (f : ℕ → ℕ) (h : ∀ n : ℕ, f n = 1 + f (n + 1)) : False := by
-
+  have h2 : ∀ k, f k + k = f 0 := by
+    intro k
+    induction k with
+    | zero => simp
+    | succ k ih =>
+      rw [h k] at ih
+      linarith
+  have h3 := h2 (f 0 + 1)
+  linarith
 
 
 lemma contradictory_definition' (f : ℕ → ℕ) (h : ∀ n : ℕ, f n = 1 + f (n + 1)) : False := by
@@ -54,9 +62,14 @@ lemma sum_triang (n : ℕ) : (∑ i ∈ Finset.range (n + 1), (i : ℚ)) = n * (
 open Finset in
 lemma sum_cube_eq_sq_sum (n : ℕ) :
     (∑ i ∈ Finset.range (n + 1), (i : ℚ) ^ 3) = (∑ i ∈ Finset.range (n + 1), (i : ℚ)) ^ 2 := by
-
-
-
+  rw [sum_triang]
+  induction n with
+  | zero => simp
+  | succ k ih =>
+    rw [sum_range_succ, ih]
+    field_simp
+    norm_cast
+    ring
 
 
 end
@@ -81,12 +94,23 @@ def op (a b : Point4) : Point4 where
 
 -- Prove that op is associative.
 lemma op_assoc {a b c : Point4} : op (op a b) c = op a (op b c) := by
+  ext <;> simp [op] <;> ring
 
 -- Investigate whether op is commutative: prove one of the following.
 lemma op_comm : ∀ a b : Point4, op a b = op b a := by
   sorry
 
 lemma not_op_comm : ¬(∀ a b : Point4, op a b = op b a) := by
+  push Not
+  use ⟨0, 1, 0, 0⟩, ⟨0, 0, 1, 0⟩
+  intro h
+  simp [op] at h
+  linarith
+
+
+
+
+
 
 
 
@@ -121,7 +145,19 @@ Then state and prove the lemma that for any element of a strict bipointed type w
 
 -- give the definition here
 structure Bipointed where
+  a : Point
+  b : Point
+  neq : a ≠ b
 
 -- state and prove the lemma here
+example {BP : Bipointed} : ∀ z, z ≠ BP.a ∨ z ≠ BP.b := by
+  intro z
+  by_cases h : z ≠ BP.a
+  · left
+    exact h
+  · push Not at h
+    rw [h]
+    right
+    exact BP.neq
 
 end Bipointed
